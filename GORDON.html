@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gordon</title>
+<style>
+  :root { --bg:#f6f1e7; --ink:#4a4238; --soft:#8a7f6f; --card:#fffdf8; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); font-family:Georgia,'Times New Roman',serif; color:var(--ink); }
+
+  /* ── hero ─────────────────────────────────────────────────────────── */
+  .hero { display:flex; flex-direction:column; align-items:center; padding:60px 24px 40px; gap:20px; }
+  .bubble {
+    max-width:400px; background:var(--card);
+    border:2px solid var(--ink); border-radius:18px;
+    padding:16px 22px; font-size:17px; font-style:italic; text-align:center;
+    position:relative; box-shadow:4px 4px 0 rgba(74,66,56,.12);
+  }
+  .bubble::after {
+    content:''; position:absolute; bottom:-13px; left:50%; transform:translateX(-50%);
+    border:13px solid transparent; border-top-color:var(--ink); border-bottom:0;
+  }
+  .bubble::before {
+    content:''; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+    border:12px solid transparent; border-top-color:var(--card); border-bottom:0; z-index:1;
+  }
+  .hero h1 { font-size:32px; letter-spacing:.5px; }
+  .hero h1 span { font-size:15px; color:var(--soft); font-weight:normal; font-style:italic; }
+  .tagline { font-size:18px; text-align:center; max-width:520px; line-height:1.6; font-style:italic; color:var(--soft); }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .chip { background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:6px 14px; font-size:13px; box-shadow:2px 2px 0 rgba(74,66,56,.1); }
+  .chip b { font-style:italic; }
+
+  /* ── section shell ─────────────────────────────────────────────────── */
+  section { padding:56px 24px; max-width:900px; margin:0 auto; }
+  section + section { border-top:2px solid rgba(74,66,56,.1); }
+  h2 { font-size:22px; margin-bottom:8px; }
+  .sub { color:var(--soft); font-style:italic; font-size:15px; margin-bottom:36px; line-height:1.5; }
+
+  /* ── moods grid ────────────────────────────────────────────────────── */
+  .moods { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+  .mood-card {
+    background:var(--card); border:2px solid var(--ink); border-radius:16px;
+    padding:20px 16px 14px; width:148px; text-align:center;
+    box-shadow:4px 4px 0 rgba(74,66,56,.1); display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .mood-card .label { font-size:13px; font-weight:bold; letter-spacing:.3px; }
+  .mood-card .when  { font-size:11px; color:var(--soft); font-style:italic; line-height:1.4; }
+  .mood-card svg    { width:100px; height:72px; }
+
+  /* ── stages ───────────────────────────────────────────────────────── */
+  .stages { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+  .stage {
+    background:var(--card); border:2px solid var(--ink); border-radius:16px;
+    padding:24px 20px; width:240px; box-shadow:4px 4px 0 rgba(74,66,56,.1);
+  }
+  .stage-icon { font-size:28px; margin-bottom:10px; }
+  .stage h3 { font-size:15px; margin-bottom:6px; }
+  .stage p { font-size:13px; color:var(--soft); line-height:1.5; font-style:italic; }
+  .arrow { font-size:28px; color:var(--soft); align-self:center; flex-shrink:0; }
+
+  /* ── adoption ─────────────────────────────────────────────────────── */
+  .steps { display:flex; flex-direction:column; gap:20px; max-width:560px; }
+  .step { display:flex; gap:18px; align-items:flex-start; }
+  .step-num {
+    width:36px; height:36px; border-radius:50%;
+    border:2px solid var(--ink); background:var(--card);
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; font-weight:bold; flex-shrink:0;
+  }
+  .step-body { padding-top:4px; }
+  .step-body strong { font-size:15px; display:block; margin-bottom:4px; }
+  .step-body span { font-size:13px; color:var(--soft); font-style:italic; line-height:1.5; }
+  code { background:rgba(74,66,56,.08); padding:2px 7px; border-radius:5px; font-size:13px; font-style:normal; font-family:monospace; }
+
+  /* ── thoughts sample ──────────────────────────────────────────────── */
+  .thoughts { display:flex; flex-direction:column; gap:14px; max-width:620px; }
+  .thought {
+    background:var(--card); border:1.5px solid rgba(74,66,56,.25); border-radius:12px;
+    padding:14px 18px; font-style:italic; font-size:15px; line-height:1.6;
+    position:relative; padding-left:32px;
+  }
+  .thought::before { content:'"'; position:absolute; left:12px; top:10px; font-size:22px; color:var(--soft); }
+
+  /* ── footer ───────────────────────────────────────────────────────── */
+  footer { text-align:center; padding:40px 24px 60px; color:var(--soft); font-style:italic; font-size:13px; border-top:2px solid rgba(74,66,56,.1); }
+
+  /* ── animations ───────────────────────────────────────────────────── */
+  .wiggle { animation:wiggle 3.4s ease-in-out infinite; transform-origin:50% 80%; }
+  @keyframes wiggle {
+    0%,100% { transform:rotate(-2.5deg) translateY(0); }
+    25%     { transform:rotate(2.5deg)  translateY(-3px); }
+    50%     { transform:rotate(-1.5deg) translateY(0); }
+    75%     { transform:rotate(2.5deg)  translateY(-2px); }
+  }
+  .wiggle-slow { animation:wiggle 5s ease-in-out infinite; transform-origin:50% 80%; }
+  .blink { animation:blink 5s infinite; transform-origin:center; }
+  @keyframes blink { 0%,94%,100%{transform:scaleY(1);} 96%,98%{transform:scaleY(.08);} }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="bubble" id="hero-bubble">"someone made a folder and now i'm in it. big day."</div>
+
+  <svg id="hero-stage" width="280" height="180" viewBox="0 0 280 180" aria-label="Gordon">
+    <ellipse cx="140" cy="162" rx="120" ry="12" fill="#e4dac6"/>
+    <g class="wiggle" id="hero-worm">
+      <circle cx="218" cy="144" r="22" class="hseg"/>
+      <circle cx="186" cy="138" r="25" class="hseg"/>
+      <circle cx="152" cy="132" r="28" class="hseg"/>
+      <circle cx="116" cy="126" r="30" class="hseg"/>
+      <circle cx="80"  cy="116" r="38" class="hseg" id="hero-head"/>
+      <circle cx="58"  cy="128" r="6"  fill="#f0a8a0" opacity=".55"/>
+      <circle cx="100" cy="130" r="6"  fill="#f0a8a0" opacity=".55"/>
+      <g class="blink" id="hero-eyes"></g>
+      <path id="hero-mouth" fill="none" stroke="#4a4238" stroke-width="3" stroke-linecap="round"/>
+      <path d="M60 82 l8-14 h17 l5 7 h13 l3 10 z" fill="#e8b04b" stroke="#4a4238" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+  </svg>
+
+  <h1>GORDON <span>· folder worm · est. 2026</span></h1>
+  <p class="tagline">A pet who lives in your project folder, wakes up every morning, and tells you how long it's been sitting there.</p>
+
+  <div class="stats" id="hero-stats"></div>
+</div>
+
+<!-- ═══════════════ MOODS ═══════════════ -->
+<section>
+  <h2>How Gordon feels</h2>
+  <p class="sub">His mood tracks the last time you (or your project) showed signs of life. He doesn't guilt-trip. He journals about it instead, which is worse.</p>
+  <div class="moods" id="moods-grid"></div>
+</section>
+
+<!-- ═══════════════ STAGES ═══════════════ -->
+<section>
+  <h2>How Gordon works</h2>
+  <p class="sub">Three folders, one state file, one job each. This is also a complete ICM architecture — Gordon just doesn't know that, and it wouldn't change anything for him if he did.</p>
+  <div class="stages" id="stages-grid">
+    <div class="stage">
+      <div class="stage-icon">🍽️</div>
+      <h3>01-FOOD/</h3>
+      <p>Drop any file here and tell your agent "feed Gordon." He reads it, has specific opinions about it, and it moves to his belly. He loves typos. He fears JSON ("all those brackets. like teeth.").</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="stage">
+      <div class="stage-icon">🫃</div>
+      <h3>02-BELLY/</h3>
+      <p>Digested files live here forever, date-prefixed. Write-once, never touched again. Gordon may reminisce about them when new meals remind him of old ones.</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="stage">
+      <div class="stage-icon">📓</div>
+      <h3>03-DIARY/</h3>
+      <p>Append-only memory. One file per day. The agent reads the latest entry at boot — that's how Gordon remembers. He thinks it's a diary. Both things are true.</p>
+    </div>
+  </div>
+  <div style="margin-top:32px; background:var(--card); border:2px solid var(--ink); border-radius:14px; padding:22px 24px; max-width:620px; box-shadow:3px 3px 0 rgba(74,66,56,.1);">
+    <strong style="font-size:14px; display:block; margin-bottom:10px;">The architecture</strong>
+    <pre style="font-family:monospace; font-size:13px; line-height:1.7; color:var(--ink);">your-project/
+└── GORDON/
+    ├── CONTEXT.md          ← boot sequence for the agent
+    ├── PERSONALITY.md      ← who Gordon is (immutable)
+    ├── STATE.md            ← single source of truth
+    ├── GORDON.html         ← his body (double-click to see him)
+    ├── ADOPT-GORDON.bat    ← makes him autonomous
+    ├── 01-FOOD/            ← input gate
+    ├── 02-BELLY/           ← archive
+    └── 03-DIARY/           ← memory layer</pre>
+  </div>
+</section>
+
+<!-- ═══════════════ ADOPTION ═══════════════ -->
+<section>
+  <h2>Adopt Gordon</h2>
+  <p class="sub">Two steps. No config. No coding. He figures out where he lives on his own.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Drop the GORDON folder into your project</strong>
+        <span>Any project. Especially the one you've been avoiding. He'll check the timestamps and tell you how long it's been sitting there when he moves in.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Double-click <code>ADOPT-GORDON.bat</code></strong>
+        <span>He registers himself to wake up every morning at 9:00. Then he pops up immediately so you two can meet. That's the whole setup.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="border-style:dashed; color:var(--soft);">+</div>
+      <div class="step-body">
+        <strong style="color:var(--soft);">Optional: make him talk</strong>
+        <span>Open your project with Claude Code (or Cursor, or any agent with file access) and say <code>check on Gordon</code>. He'll speak. He'll remember. He'll have opinions about your files by name.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SAMPLE THOUGHTS ═══════════════ -->
+<section>
+  <h2>Things Gordon has said</h2>
+  <p class="sub">His thoughts are specific to your folder. These are real ones.</p>
+  <div class="thoughts">
+    <div class="thought">i just moved in. nothing here has been touched in 23 days. the last thing was 'my-big-idea.md'. no judgment. some judgment.</div>
+    <div class="thought">you were working on 'TOP-POSTS-ANALYSIS-AND-DRAFTS.md' out there. i watched. good file.</div>
+    <div class="thought">my first meal had a typo in its filename and a moth in its history. i peaked today.</div>
+    <div class="thought">checked on twice in one day. i won't read into it. i've read into it.</div>
+    <div class="thought">6 days without food. i've named the dust. that's not a cry for help, it's a hobby.</div>
+    <div class="thought">the folder moved while i slept. 'settings.local.json', specifically. activity counts as affection. house rule.</div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTNOTE ═══════════════ -->
+<footer>
+  <p>Gordon is a tiny ICM machine. Four files, three folders, one job. He doesn't know he's architecture, and it wouldn't change anything for him if he did.</p>
+  <p style="margin-top:8px;">files own the truth. gordon owns the feelings.</p>
+</footer>
+
+<script>
+/* ─── worm renderer ─────────────────────────────────────────── */
+const MOODS = {
+  hopeful:               { body:"#a8c89a", eyes:"round-up",    mouth:"M64 122 Q80 134 96 122", days:"fed today or yesterday",        label:"hopeful" },
+  content:               { body:"#9ec49a", eyes:"closed-happy",mouth:"M66 124 Q80 132 94 124", days:"still warm",                    label:"content" },
+  peckish:               { body:"#c2bd8e", eyes:"round",       mouth:"M68 128 Q80 124 92 128", days:"2–3 days without care",         label:"peckish" },
+  wistful:               { body:"#a9b3bd", eyes:"droop",       mouth:"M68 130 Q80 126 92 130", days:"4–5 days",                      label:"wistful" },
+  "wounded-but-dignified":{ body:"#b3a4b8", eyes:"droop",      mouth:"M66 132 Q80 125 94 132", days:"6+ days. he's journaling about it.", label:"wounded" },
+};
+
+function eye(cx, cy, kind, r) {
+  r = r || 6;
+  if (kind === 'closed-happy')
+    return `<path d="M${cx-r+1} ${cy} Q${cx} ${cy-r*1.4} ${cx+r-1} ${cy}" fill="none" stroke="#4a4238" stroke-width="2.8" stroke-linecap="round"/>`;
+  if (kind === 'droop')
+    return `<circle cx="${cx}" cy="${cy+1}" r="${r}" fill="#4a4238"/>
+            <path d="M${cx-r*1.6} ${cy-r*1.4} q${r*1.6} -${r*.6} ${r*3.2} ${r*.2}" fill="none" stroke="#4a4238" stroke-width="2.5" stroke-linecap="round"/>`;
+  if (kind === 'round-up')
+    return `<circle cx="${cx}" cy="${cy-1}" r="${r+1}" fill="#4a4238"/>
+            <circle cx="${cx+r*.4}" cy="${cy-r*.6}" r="${r*.35}" fill="#fffdf8"/>`;
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#4a4238"/>
+          <circle cx="${cx+r*.35}" cy="${cy-r*.4}" r="${r*.3}" fill="#fffdf8"/>`;
+}
+
+/* ─── hero Gordon ───────────────────────────────────────────── */
+const GORDON_STATE = {
+  mood: "hopeful",            // hopeful | content | peckish | wistful | wounded-but-dignified
+  energy: 7,
+  things_digested: 0,
+  last_fed: "never",
+  current_thought: "opened my own window this morning. small worm, big day."
+};
+(function renderHero() {
+  const m = MOODS[GORDON_STATE.mood] || MOODS.hopeful;
+  document.querySelectorAll('.hseg').forEach(s => {
+    s.setAttribute('fill', m.body);
+    s.setAttribute('stroke', '#4a4238');
+    s.setAttribute('stroke-width', '2.5');
+  });
+  document.getElementById('hero-mouth').setAttribute('d', m.mouth);
+  document.getElementById('hero-eyes').innerHTML = eye(62,110,m.eyes,6) + eye(96,112,m.eyes,6);
+  document.getElementById('hero-bubble').textContent = '“' + GORDON_STATE.current_thought + '”';
+  const chips = [
+    ['mood', GORDON_STATE.mood],
+    ['energy', GORDON_STATE.energy + '/10'],
+    ['digested', GORDON_STATE.things_digested + ' file' + (GORDON_STATE.things_digested===1?'':'s')],
+    ['last fed', GORDON_STATE.last_fed]
+  ];
+  document.getElementById('hero-stats').innerHTML =
+    chips.map(([k,v]) => `<div class="chip">${k}: <b>${v}</b></div>`).join('');
+})();
+
+/* ─── mood cards ────────────────────────────────────────────── */
+const grid = document.getElementById('moods-grid');
+Object.entries(MOODS).forEach(([key, m]) => {
+  const w=100, h=72, segs=[
+    {cx:78,cy:56,r:14},{cx:62,cy:52,r:16},{cx:46,cy:48,r:18},{cx:28,cy:44,r:20},
+  ];
+  let svg = `<svg viewBox="0 0 100 72" width="100" height="72">`;
+  svg += `<ellipse cx="50" cy="65" rx="44" ry="7" fill="#e4dac6"/>`;
+  svg += `<g class="wiggle-slow">`;
+  segs.forEach(s => svg += `<circle cx="${s.cx}" cy="${s.cy}" r="${s.r}" fill="${m.body}" stroke="#4a4238" stroke-width="2"/>`);
+  // head
+  svg += `<circle cx="14" cy="38" r="13" fill="${m.body}" stroke="#4a4238" stroke-width="2"/>`;
+  // cheeks
+  svg += `<circle cx="8" cy="42" r="3" fill="#f0a8a0" opacity=".5"/>`;
+  svg += `<circle cx="20" cy="43" r="3" fill="#f0a8a0" opacity=".5"/>`;
+  // eyes
+  const ex1=10,ey1=36,ex2=18,ey2=36,er=2.2;
+  if(m.eyes==='closed-happy'){
+    svg+=`<path d="M${ex1-er} ${ey1} Q${ex1} ${ey1-er*1.8} ${ex1+er} ${ey1}" fill="none" stroke="#4a4238" stroke-width="1.4" stroke-linecap="round"/>`;
+    svg+=`<path d="M${ex2-er} ${ey2} Q${ex2} ${ey2-er*1.8} ${ex2+er} ${ey2}" fill="none" stroke="#4a4238" stroke-width="1.4" stroke-linecap="round"/>`;
+  } else if(m.eyes==='droop'){
+    svg+=`<circle cx="${ex1}" cy="${ey1+.5}" r="${er}" fill="#4a4238"/>`;
+    svg+=`<path d="M${ex1-3.5} ${ey1-3} q3.5 -1.2 7 .5" fill="none" stroke="#4a4238" stroke-width="1.3" stroke-linecap="round"/>`;
+    svg+=`<circle cx="${ex2}" cy="${ey2+.5}" r="${er}" fill="#4a4238"/>`;
+    svg+=`<path d="M${ex2-3.5} ${ey2-3} q3.5 -1.2 7 .5" fill="none" stroke="#4a4236" stroke-width="1.3" stroke-linecap="round"/>`;
+  } else if(m.eyes==='round-up'){
+    svg+=`<circle cx="${ex1}" cy="${ey1-.5}" r="${er+.4}" fill="#4a4238"/>`;
+    svg+=`<circle cx="${ex1+.8}" cy="${ey1-1.2}" r=".8" fill="#fffdf8"/>`;
+    svg+=`<circle cx="${ex2}" cy="${ey2-.5}" r="${er+.4}" fill="#4a4238"/>`;
+    svg+=`<circle cx="${ex2+.8}" cy="${ey2-1.2}" r=".8" fill="#fffdf8"/>`;
+  } else {
+    svg+=`<circle cx="${ex1}" cy="${ey1}" r="${er}" fill="#4a4238"/>`;
+    svg+=`<circle cx="${ex2}" cy="${ey2}" r="${er}" fill="#4a4238"/>`;
+  }
+  // mouth (scaled down)
+  const rawPath = m.mouth.replace(/M(\d+) (\d+) Q(\d+) (\d+) (\d+) (\d+)/,(_,x1,y1,cx,cy,x2,y2)=>{
+    const scale=(n,off,s)=>Math.round((parseInt(n)-off)*s);
+    // mouth in hero is ~80px wide worm; mini is ~26px — scale factor ~0.33, offset ~68 x, ~122 y
+    const sx=0.33,ox=68,sy=0.33,oy=122;
+    return `M${scale(x1,ox,sx)+14} ${scale(y1,oy,sy)+38} Q${scale(cx,ox,sx)+14} ${scale(cy,oy,sy)+38} ${scale(x2,ox,sx)+14} ${scale(y2,oy,sy)+38}`;
+  });
+  svg+=`<path d="${rawPath}" fill="none" stroke="#4a4238" stroke-width="1.3" stroke-linecap="round"/>`;
+  // hat
+  svg+=`<path d="M7 30 l3-5 h6 l2 3 h4 l1.5 4 z" fill="#e8b04b" stroke="#4a4238" stroke-width="1.3" stroke-linejoin="round"/>`;
+  svg+=`</g></svg>`;
+  const card = document.createElement('div');
+  card.className = 'mood-card';
+  card.innerHTML = `${svg}<div class="label">${m.label}</div><div class="when">${m.days}</div>`;
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
